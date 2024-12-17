@@ -2,7 +2,6 @@ package com.danozzo.elasticsearchspring.controller;
 
 import com.danozzo.elasticsearchspring.model.Product;
 import com.danozzo.elasticsearchspring.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(Product product) {
+    public Product createProduct(@RequestBody Product product) {
         return productService.saveProduct(product);
     }
 
@@ -28,7 +27,7 @@ public class ProductController {
     }
 
     @PostMapping("/upload-xml")
-    public Iterable<Product> saveProductsFromXml(String filePath) throws IOException {
+    public Iterable<Product> saveProductsFromXml(@RequestParam String filePath) throws IOException {
         return productService.saveProductsFromXml(filePath);
     }
 
