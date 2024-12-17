@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -19,6 +20,12 @@ public class ProductService {
 
     public ProductRepository getProductRepository() {
         return productRepository;
+    }
+
+    public Optional<Product> deleteProductById(String id){
+        Optional<Product> product = productRepository.findById(id);
+        productRepository.deleteById(id);
+        return product;
     }
 
     public Product saveProduct(Product product) {

@@ -1,28 +1,50 @@
-version: "3.8"
-
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     container_name: elasticsearch
-    ports:
-      - "9200:9200"
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - ELASTICSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
     volumes:
-      - es-data:/usr/share/elasticsearch/data
+      - elastic_data:/usr/share/elasticsearch/data
 
-  java-app:
+  springapp:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: java-app
+    container_name: spring-app-elasticsearch
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     depends_on:
       - elasticsearch
-    environment:
-      - ELASTICSEARCH_HOST=http://elasticsearch:9200
-    volumes:
-      - ./input-data:/app/input-data
 
 volumes:
-  es-data:
+  elastic_data:
+    driver: local
+
+
+#  kibana:
+#    container_name: kibana
+#    image: docker.elastic.co/kibana/kibana:7.4.0
+#    restart: always
+#    environment:
+#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200    # address of elasticsearch docker container which kibana will connect
+#    ports:
+#      - 5601:5601
+#    depends_on:
+#      - elasticsearch
+
+#  spring-app:
+#    image: elastic-search-spring-application
+#    container_name: spring-app
+#    depends_on:
+#      - elasticsearch
+#    environment:
+#      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+#    ports:
+#      - "8080:8080"

@@ -2,9 +2,12 @@ package com.danozzo.elasticsearchspring.controller;
 
 import com.danozzo.elasticsearchspring.model.Product;
 import com.danozzo.elasticsearchspring.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -32,8 +35,11 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable String id) {
-        productService.getProductRepository().deleteById(id);
+    public ResponseEntity<Optional<Product>>  deleteProduct(@PathVariable String id) {
+      Optional<Product> product = productService.deleteProductById(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .header("Custom-Header", "Value")
+                .body(product);
     }
 
     @DeleteMapping
