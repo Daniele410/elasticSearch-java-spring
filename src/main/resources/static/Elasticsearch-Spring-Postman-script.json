@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"id\": \"1\",\n  \"name\": \"Sample Product\",\n  \"price\": 19.99\n}"
+					"raw": "{\n  \"id\": \"1\",\n  \"name\": \"Sample Product\",\n  \"description\" : \"the product test\",\n  \"price\": 19.99\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/products",

@@ -22,29 +22,14 @@ services:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     depends_on:
       - elasticsearch
+    restart: on-failure # Restart container if it fails
+    deploy:
+        restart_policy:
+          condition: on-failure
+          delay: 5s  # Retry after 5 seconds
+          max_attempts: 5  # Number max of retries
+          window: 30s  # Temporal window to retry
 
 volumes:
   elastic_data:
     driver: local
-
-
-#  kibana:
-#    container_name: kibana
-#    image: docker.elastic.co/kibana/kibana:7.4.0
-#    restart: always
-#    environment:
-#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200    # address of elasticsearch docker container which kibana will connect
-#    ports:
-#      - 5601:5601
-#    depends_on:
-#      - elasticsearch
-
-#  spring-app:
-#    image: elastic-search-spring-application
-#    container_name: spring-app
-#    depends_on:
-#      - elasticsearch
-#    environment:
-#      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
-#    ports:
-#      - "8080:8080"

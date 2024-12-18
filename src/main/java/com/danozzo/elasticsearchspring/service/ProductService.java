@@ -60,7 +60,7 @@ public class ProductService {
         ProductList productList = xmlMapper.readValue(inputStream, ProductList.class);
         List<Product> products = productList.getProduct();
 
-        products.removeIf(product -> productRepository.existsById(product.getId())); // Rimuovi duplicati
+        products.removeIf(product -> productRepository.existsById(product.getId())); // remove existing products
         return productRepository.saveAll(products);
     }
 
