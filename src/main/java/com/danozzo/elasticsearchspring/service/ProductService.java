@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,15 @@ public class ProductService {
         }
 
         return allProducts;
+    }
+
+    public Iterable<Product> saveProductsFromInputStream(InputStream inputStream) throws IOException {
+        XmlMapper xmlMapper = new XmlMapper();
+        ProductList productList = xmlMapper.readValue(inputStream, ProductList.class);
+        List<Product> products = productList.getProduct();
+
+        products.removeIf(product -> productRepository.existsById(product.getId())); // Rimuovi duplicati
+        return productRepository.saveAll(products);
     }
 
 }
